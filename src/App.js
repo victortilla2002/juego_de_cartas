@@ -17,14 +17,14 @@ const cartasImagenes = [
   imagen5, imagen6, imagen8, imagen9
 ];
 
-// Función para anunciar un mensaje en voz alta
+// funcion para anunciar un mensaje en voz alta
 const anunciar = (mensaje) => {
   const utterance = new SpeechSynthesisUtterance(mensaje);
-  utterance.lang = 'es-ES'; // Configura el idioma en español
-  speechSynthesis.speak(utterance); // Hablar el mensaje
+  utterance.lang = 'es-ES'; 
+  speechSynthesis.speak(utterance); 
 };
 
-// Función para describir las cartas
+// funcion para describir las cartas
 const descripcionDeLaCarta = (imagen) => {
   const descripciones = {
     [imagen1]: 'Cereza',
@@ -69,7 +69,6 @@ const JuegoCartas = () => {
   const [cartasEmparejadas, setCartasEmparejadas] = useState([]);
 
   useEffect(() => {
-    // Crear las cartas emparejadas
     const crearCartas = () => {
       let cartas = [];
       cartasImagenes.forEach(imagen => {
