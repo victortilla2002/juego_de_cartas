@@ -1,7 +1,32 @@
+/**
+ * Juego de parejas en React.
+ * 
+ * Este componente implementa un juego de cartas en el que el jugador debe emparejar cartas con imágenes similares. 
+ * El juego se juega con un conjunto de imágenes duplicadas, las cuales son barajadas y ocultas en cartas con un reverso.
+ * El jugador puede hacer clic en las cartas para girarlas y revelar las imágenes. Si se emparejan dos cartas con la misma imagen, 
+ * las cartas se mantienen giradas. El juego termina cuando todas las cartas han sido emparejadas correctamente. 
+ * Una vez que el jugador ha ganado, se muestra un mensaje de victoria y el juego se reinicia automáticamente al hacer clic en "Aceptar".
+ * 
+ * Funciones principales:
+ * - `crearCartas`: Crea y baraja las cartas del juego.
+ * - `manejarClic`: Maneja el clic sobre las cartas, girándolas y verificando si hay un par coincidente.
+ * - `anunciar`: Reproduce un mensaje en voz alta para describir las acciones o el estado del juego.
+ * - `descripcionDeLaCarta`: Devuelve una descripción textual de la carta seleccionada.
+ * 
+ * Dependencias:
+ * - React
+ * - SpeechSynthesisUtterance para la función de voz (anuncios).
+ * 
+ * Imágenes utilizadas:
+ * - Cereza, Fruta de la pasión, Naranja, Pera, Piña, Sandía, Melón, Fresita.
+ * 
+ * @IvanDonaireMena
+ * @VictorBenitez
+ */
 import React, { useState, useEffect } from 'react';
 import './index.css'; // Estilos CSS (si los tienes)
 
-// Imágenes
+// Imágenes de las cartas
 import imagen1 from './img/cereza.png';
 import imagen2 from './img/frutaPasion.png';
 import imagen3 from './img/naranja.png';
@@ -17,14 +42,14 @@ const cartasImagenes = [
   imagen5, imagen6, imagen8, imagen9
 ];
 
-// funcion para anunciar un mensaje en voz alta
+// Función para anunciar un mensaje en voz alta
 const anunciar = (mensaje) => {
   const utterance = new SpeechSynthesisUtterance(mensaje);
   utterance.lang = 'es-ES'; 
   speechSynthesis.speak(utterance); 
 };
 
-// funcion para describir las cartas
+// Función para describir las cartas
 const descripcionDeLaCarta = (imagen) => {
   const descripciones = {
     [imagen1]: 'Cereza',
@@ -39,6 +64,7 @@ const descripcionDeLaCarta = (imagen) => {
   return descripciones[imagen] || 'Carta desconocida';
 };
 
+// Componente Carta: Define cómo se visualiza una carta
 const Carta = ({ imagen, estaGirada, onClick }) => {
   useEffect(() => {
     if (estaGirada) {
@@ -64,23 +90,25 @@ const Carta = ({ imagen, estaGirada, onClick }) => {
 };
 
 const JuegoCartas = () => {
-  const [cartas, setCartas] = useState([]);
-  const [cartasGiradas, setCartasGiradas] = useState([]);
-  const [cartasEmparejadas, setCartasEmparejadas] = useState([]);
+  const [cartas, setCartas] = useState([]); // Estado que guarda todas las cartas
+  const [cartasGiradas, setCartasGiradas] = useState([]); // Estado que guarda las cartas giradas
+  const [cartasEmparejadas, setCartasEmparejadas] = useState([]); // Estado que guarda las cartas emparejadas
 
   useEffect(() => {
+    // Función para crear y barajar las cartas
     const crearCartas = () => {
       let cartas = [];
       cartasImagenes.forEach(imagen => {
         cartas.push({ imagen, id: Math.random() });
         cartas.push({ imagen, id: Math.random() });
       });
-      return cartas.sort(() => Math.random() - 0.5);
+      return cartas.sort(() => Math.random() - 0.5); // Baraja las cartas
     };
 
-    setCartas(crearCartas());
+    setCartas(crearCartas()); // Inicializa el mazo de cartas
   }, []);
 
+  // Función que maneja el clic en una carta
   const manejarClic = (indice) => {
     if (cartasGiradas.length < 2 && !cartasEmparejadas.includes(cartas[indice].imagen)) {
       setCartasGiradas((prev) => [...prev, indice]);
@@ -89,21 +117,42 @@ const JuegoCartas = () => {
   };
 
   useEffect(() => {
+    // Verifica si las cartas giradas coinciden
     if (cartasGiradas.length === 2) {
       const [primerIndice, segundoIndice] = cartasGiradas;
       if (cartas[primerIndice].imagen === cartas[segundoIndice].imagen) {
         setCartasEmparejadas((prev) => [...prev, cartas[primerIndice].imagen]);
         anunciar('¡Las cartas coinciden!');
       }
-      setTimeout(() => setCartasGiradas([]), 1000);
+      setTimeout(() => setCartasGiradas([]), 1000); // Reinicia las cartas giradas después de un breve retraso
     }
   }, [cartasGiradas, cartas]);
 
   useEffect(() => {
+    // Verifica si todas las cartas están emparejadas
     if (cartasEmparejadas.length === cartasImagenes.length) {
       anunciar('¡Felicidades! Has ganado el juego.');
+      alert('¡Felicidades! Has ganado el juego.');
+
+      // Reinicia el juego cuando el usuario haga clic en "Aceptar"
+      const reiniciarJuego = () => {
+        setCartas(crearCartas()); // Regenera las cartas
+        setCartasGiradas([]); // Limpia las cartas giradas
+        setCartasEmparejadas([]); // Limpia las cartas emparejadas
+      };
+      reiniciarJuego();
     }
   }, [cartasEmparejadas]);
+
+  // Función para crear y barajar las cartas
+  const crearCartas = () => {
+    let cartas = [];
+    cartasImagenes.forEach(imagen => {
+      cartas.push({ imagen, id: Math.random() });
+      cartas.push({ imagen, id: Math.random() });
+    });
+    return cartas.sort(() => Math.random() - 0.5); // Baraja las cartas
+  };
 
   return (
     <div className="juego-container">
