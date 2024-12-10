@@ -1,94 +1,96 @@
-import { useState, useEffect } from "react";
-import "./App.css";
+import React, { useState, useEffect } from 'react';
+import './index.css'; // Estilos CSS (si los tienes)
 
-function App() {
-  const [cartas, setCartas] = useState([]);
-  const [cartaSeleccionada1, setCartaSeleccionada1] = useState(null);
-  const [cartaSeleccionada2, setCartaSeleccionada2] = useState(null);
-  const [bloqueo, setBloqueo] = useState(false);
-  const [intentos, setIntentos] = useState(0);
+// Imágenes
+import imagen1 from './img/cereza.png';
+import imagen2 from './img/frutaPasion.png';
+import imagen3 from './img/naranja.png';
+import imagen4 from './img/pera.png';
+import imagen5 from './img/piña.png';
+import imagen6 from './img/sandia.png';
+import imagen7 from './img/interrogacion.png';
+import imagen8 from './img/melon.png';
+import imagen9 from './img/fresita.png';
 
-  // inicializar cartas
-  useEffect(() => {
-    reiniciarJuego();
-  }, []);
+const cartasImagenes = [
+  imagen1, imagen2, imagen3, imagen4, 
+  imagen5, imagen6, imagen8, imagen9
+];
 
-  const inicializarCartas = () => {
-    const cartasIniciales = [
-      { id: 1, parejaId: 1, volteada: false },
-      { id: 2, parejaId: 1, volteada: false },
-      { id: 3, parejaId: 2, volteada: false },
-      { id: 4, parejaId: 2, volteada: false },
-      { id: 5, parejaId: 3, volteada: false },
-      { id: 6, parejaId: 3, volteada: false },
-      { id: 7, parejaId: 4, volteada: false },
-      { id: 8, parejaId: 4, volteada: false },
-      { id: 9, parejaId: 5, volteada: false },
-      { id: 10, parejaId: 5, volteada: false },
-      { id: 11, parejaId: 6, volteada: false },
-      { id: 12, parejaId: 6, volteada: false },
-    ];
-    return cartasIniciales.sort(() => Math.random() - 0.5);
-  };
-
-  const manejarSeleccion = (carta) => {
-    if (bloqueo) return;
-    if (!carta.volteada) {
-      carta.volteada = true;
-      if (!cartaSeleccionada1) {
-        setCartaSeleccionada1(carta);
-      } else if (!cartaSeleccionada2) {
-        setCartaSeleccionada2(carta);
-        setBloqueo(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (cartaSeleccionada1 && cartaSeleccionada2) {
-      if (cartaSeleccionada1.parejaId === cartaSeleccionada2.parejaId) {
-        setCartaSeleccionada1(null);
-        setCartaSeleccionada2(null);
-        setBloqueo(false);
-      } else {
-        setTimeout(() => {
-          cartaSeleccionada1.volteada = false;
-          cartaSeleccionada2.volteada = false;
-          setCartaSeleccionada1(null);
-          setCartaSeleccionada2(null);
-          setBloqueo(false);
-        }, 1000);
-      }
-      setIntentos((prev) => prev + 1);
-    }
-  }, [cartaSeleccionada1, cartaSeleccionada2]);
-
-  const reiniciarJuego = () => {
-    setCartas(inicializarCartas());
-    setCartaSeleccionada1(null);
-    setCartaSeleccionada2(null);
-    setIntentos(0);
-    setBloqueo(false);
-  };
-
+const Carta = ({ imagen, estaGirada, onClick }) => {
   return (
-    <div className="app">
-      <h1>react-parejas</h1>
-      <button onClick={reiniciarJuego}>reiniciar</button>
-      <div className="tablero">
-        {cartas.map((carta) => (
-          <div
-            key={carta.id}
-            className={`carta ${carta.volteada ? "volteada" : ""}`}
-            onClick={() => manejarSeleccion(carta)}
-          >
-            {carta.volteada && <span>{carta.parejaId}</span>}
-          </div>
-        ))}
+    <div className={`carta ${estaGirada ? 'girada' : ''}`} onClick={onClick}>
+      <div className="cara frontal">
+        <img src={imagen7} alt="Cara trasera" />
       </div>
-      <p>intentos: {intentos}</p>
+      <div className="cara trasera">
+        <img src={imagen} alt="Imagen de la carta" />
+      </div>
     </div>
   );
-}
+};
 
-export default App;
+const JuegoCartas = () => {
+  const [cartas, setCartas] = useState([]);
+  const [cartasGiradas, setCartasGiradas] = useState([]);
+  const [cartasEmparejadas, setCartasEmparejadas] = useState([]);
+
+  useEffect(() => {
+    // Crear las cartas emparejadas
+    const crearCartas = () => {
+      let cartas = [];
+      // Asegurándonos de que cada imagen aparezca dos veces
+      cartasImagenes.forEach(imagen => {
+        cartas.push({ imagen, id: Math.random() });
+        cartas.push({ imagen, id: Math.random() }); // Añadimos la misma carta otra vez
+      });
+      return cartas.sort(() => Math.random() - 0.5); // Mezcla las cartas
+    };
+
+    setCartas(crearCartas()); // Establecer las cartas una vez cuando se monta el componente
+  }, []);
+
+  const manejarClic = (indice) => {
+    if (cartasGiradas.length < 2 && !cartasEmparejadas.includes(cartas[indice].imagen)) {
+      // Añadir la carta a las giradas
+      setCartasGiradas((prev) => [...prev, indice]);
+    }
+  };
+
+  useEffect(() => {
+    if (cartasGiradas.length === 2) {
+      // Comprobar si las dos cartas giradas son iguales
+      const [primerIndice, segundoIndice] = cartasGiradas;
+      if (cartas[primerIndice].imagen === cartas[segundoIndice].imagen) {
+        // Si son iguales, añadirlas a las emparejadas
+        setCartasEmparejadas((prev) => [...prev, cartas[primerIndice].imagen]);
+      }
+      // Esperar un momento y luego girar las cartas nuevamente
+      setTimeout(() => setCartasGiradas([]), 1000);
+    }
+  }, [cartasGiradas, cartas]);
+
+  // Comprobar si el juego ha terminado
+  useEffect(() => {
+    if (cartasEmparejadas.length === cartasImagenes.length) {
+      alert('Eres un maquina socio, has ganao');
+    }
+  }, [cartasEmparejadas]);
+
+  return (
+    <div className="juego">
+      <div className="cartas">
+        {cartas.map((carta, index) => (
+          <Carta
+            key={carta.id}
+            imagen={carta.imagen}
+            estaGirada={cartasGiradas.includes(index) || cartasEmparejadas.includes(carta.imagen)}
+            onClick={() => manejarClic(index)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default JuegoCartas;
