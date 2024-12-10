@@ -17,14 +17,47 @@ const cartasImagenes = [
   imagen5, imagen6, imagen8, imagen9
 ];
 
+// Función para anunciar un mensaje en voz alta
+const anunciar = (mensaje) => {
+  const utterance = new SpeechSynthesisUtterance(mensaje);
+  utterance.lang = 'es-ES'; // Configura el idioma en español
+  speechSynthesis.speak(utterance); // Hablar el mensaje
+};
+
+// Función para describir las cartas
+const descripcionDeLaCarta = (imagen) => {
+  const descripciones = {
+    [imagen1]: 'Cereza',
+    [imagen2]: 'Fruta de la pasión',
+    [imagen3]: 'Naranja',
+    [imagen4]: 'Pera',
+    [imagen5]: 'Piña',
+    [imagen6]: 'Sandía',
+    [imagen8]: 'Melón',
+    [imagen9]: 'Fresita',
+  };
+  return descripciones[imagen] || 'Carta desconocida';
+};
+
 const Carta = ({ imagen, estaGirada, onClick }) => {
+  useEffect(() => {
+    if (estaGirada) {
+      anunciar(`Mostrando la imagen de ${descripcionDeLaCarta(imagen)}`);
+    }
+  }, [estaGirada, imagen]);
+
   return (
-    <div className={`carta ${estaGirada ? 'girada' : ''}`} onClick={onClick}>
+    <div
+      className={`carta ${estaGirada ? 'girada' : ''}`}
+      onClick={onClick}
+      role="button"
+      aria-label={estaGirada ? `Carta girada, mostrando ${descripcionDeLaCarta(imagen)}` : 'Carta oculta'}
+    >
       <div className="cara frontal">
-        <img src={imagen7} alt="Cara trasera" />
+        <img src={imagen7} alt="Reverso de la carta" />
       </div>
       <div className="cara trasera">
-        <img src={imagen} alt="Imagen de la carta" />
+        <img src={imagen} alt={`Imagen de la carta: ${descripcionDeLaCarta(imagen)}`} />
       </div>
     </div>
   );
@@ -52,6 +85,7 @@ const JuegoCartas = () => {
   const manejarClic = (indice) => {
     if (cartasGiradas.length < 2 && !cartasEmparejadas.includes(cartas[indice].imagen)) {
       setCartasGiradas((prev) => [...prev, indice]);
+      anunciar(`Has seleccionado la carta número ${indice + 1}`);
     }
   };
 
@@ -60,6 +94,7 @@ const JuegoCartas = () => {
       const [primerIndice, segundoIndice] = cartasGiradas;
       if (cartas[primerIndice].imagen === cartas[segundoIndice].imagen) {
         setCartasEmparejadas((prev) => [...prev, cartas[primerIndice].imagen]);
+        anunciar('¡Las cartas coinciden!');
       }
       setTimeout(() => setCartasGiradas([]), 1000);
     }
@@ -67,14 +102,14 @@ const JuegoCartas = () => {
 
   useEffect(() => {
     if (cartasEmparejadas.length === cartasImagenes.length) {
-      alert('Eres un máquina socio, has ganado');
+      anunciar('¡Felicidades! Has ganado el juego.');
     }
   }, [cartasEmparejadas]);
 
   return (
     <div className="juego-container">
       <header className="encabezado">
-        <h1 className="titulo">¡Bienvenido al juego de parejas!</h1>
+        <h1 className="titulo">¡Bienvenido al juego de parejas inclusivo!</h1>
       </header>
       <div className="juego">
         <div className="cartas">
