@@ -6,7 +6,7 @@ body {
   align-items: center;
   height: 100vh; /* Altura igual al viewport */
   background: linear-gradient(135deg, #ff9a9e 0%, #dba191 55%, #d857b3 100%);
-  font-family: Arial, sans-serif; /* Fuente sencilla y legible */
+  font-family: 'Pacifico', cursive; /* Fuente más estilizada */
 }
 
 .container {
@@ -15,8 +15,10 @@ body {
 
 h1 {
   margin: 0 0 20px 0; /* Espaciado solo debajo del título */
-  font-size: 2.5rem; /* Tamaño más grande */
-  color: white;
+  font-size: 3rem; /* Tamaño más grande */
+  color: rgb(202, 77, 125);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Sombra para dar énfasis */
+  letter-spacing: 3px; /* Espaciado entre letras */
 }
 
 .juego {
@@ -24,10 +26,10 @@ h1 {
   flex-direction: column; /* Contenedor en columna para incluir texto y cartas */
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9); /* Fondo con opacidad */
-  border-radius: 15px; /* Bordes redondeados */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo con opacidad */
+  border-radius: 20px; /* Bordes redondeados más pronunciados */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
 }
 
 .cartas {
@@ -35,6 +37,7 @@ h1 {
   grid-template-columns: repeat(4, 120px); /* Cartas más pequeñas */
   grid-gap: 20px;
   padding: 10px;
+  justify-items: center;
 }
 
 .carta {
@@ -44,12 +47,13 @@ h1 {
   cursor: pointer;
   transition: transform 0.6s ease-in-out, box-shadow 0.3s ease-in-out;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative; /* Necesario para contener las caras */
+  background: linear-gradient(135deg, #f7c1e0, #f79c42); /* Degradado suave que combina con el fondo */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .carta:hover {
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Efecto hover más pronunciado */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Efecto hover más pronunciado */
 }
 
 .carta .cara {

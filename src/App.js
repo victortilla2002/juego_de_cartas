@@ -109,7 +109,7 @@ const JuegoCartas = () => {
   return (
     <div className="juego-container">
       <header className="encabezado">
-        <h1 className="titulo">¡Bienvenido al juego de parejas inclusivo!</h1>
+        <h1 className="titulo">¡Bienvenido al juego de parejas!</h1>
       </header>
       <div className="juego">
         <div className="cartas">
