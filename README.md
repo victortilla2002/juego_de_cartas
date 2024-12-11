@@ -34,9 +34,11 @@
    cd juego-parejas-react
 
 3. **Instala las dependencias necesarias para el proyecto usando npm** en tu máquina local, ejecutando el siguiente comando en la terminal:
+  ```bash
   npm install
 
-4. **Inicia el servidor de desarrollo para ejecutar la aplicación** en tu máquina local, ejecutando el siguiente comando en la terminal:
+5. **Inicia el servidor de desarrollo para ejecutar la aplicación** en tu máquina local, ejecutando el siguiente comando en la terminal:
+  ```bash
   npm start
 
-5. **¡Empieza a jugar y diviértete! 🎉**
+6. **¡Empieza a jugar y diviértete! 🎉**
