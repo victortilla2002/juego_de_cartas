@@ -45,8 +45,8 @@ const cartasImagenes = [
 // Función para anunciar un mensaje en voz alta
 const anunciar = (mensaje) => {
   const utterance = new SpeechSynthesisUtterance(mensaje);
-  utterance.lang = 'es-ES'; 
-  speechSynthesis.speak(utterance); 
+  utterance.lang = 'es-ES';
+  speechSynthesis.speak(utterance);
 };
 
 // Función para describir las cartas
@@ -110,11 +110,17 @@ const JuegoCartas = () => {
 
   // Función que maneja el clic en una carta
   const manejarClic = (indice) => {
-    if (cartasGiradas.length < 2 && !cartasEmparejadas.includes(cartas[indice].imagen)) {
+    // Evita que se gire una carta ya girada o emparejada
+    if (
+      cartasGiradas.length < 2 && 
+      !cartasGiradas.includes(indice) && 
+      !cartasEmparejadas.includes(cartas[indice].imagen)
+    ) {
       setCartasGiradas((prev) => [...prev, indice]);
       anunciar(`Has seleccionado la carta número ${indice + 1}`);
     }
   };
+  
 
   useEffect(() => {
     // Verifica si las cartas giradas coinciden
@@ -132,7 +138,7 @@ const JuegoCartas = () => {
     // Verifica si todas las cartas están emparejadas
     if (cartasEmparejadas.length === cartasImagenes.length) {
       anunciar('¡Felicidades! Has ganado el juego.');
-      alert('¡Felicidades! Has ganado el juego.');
+      setTimeout(() => alert('¡Felicidades! Has ganado el juego.'), 1000);
 
       // Reinicia el juego cuando el usuario haga clic en "Aceptar"
       const reiniciarJuego = () => {
@@ -140,7 +146,7 @@ const JuegoCartas = () => {
         setCartasGiradas([]); // Limpia las cartas giradas
         setCartasEmparejadas([]); // Limpia las cartas emparejadas
       };
-      reiniciarJuego();
+       setTimeout(() => reiniciarJuego(), 1500);
     }
   }, [cartasEmparejadas]);
 
