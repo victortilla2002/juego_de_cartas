@@ -30,6 +30,7 @@
    git clone https://github.com/tu-usuario/juego-parejas-react.git
 
 2. **Accede al directorio del proyecto** en tu máquina local, ejecutando el siguiente comando en la terminal:
+   ```bash
    cd juego-parejas-react
 
 3. **Instala las dependencias necesarias para el proyecto usando npm** en tu máquina local, ejecutando el siguiente comando en la terminal:
