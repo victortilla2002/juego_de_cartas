@@ -24,7 +24,7 @@
  * @VictorBenitez
  */
 import React, { useState, useEffect } from 'react';
-import './index.css'; // Estilos CSS (si los tienes)
+import './index.css';
 
 // Imágenes de las cartas
 import imagen1 from './img/cereza.png';
