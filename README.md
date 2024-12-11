@@ -39,6 +39,6 @@
 
 4. **Inicia el servidor de desarrollo para ejecutar la aplicación** en tu máquina local, ejecutando el siguiente comando en la terminal:
     ```bash
-  npm start
+   npm start
 
 5. **¡Empieza a jugar y diviértete!** 🎉
