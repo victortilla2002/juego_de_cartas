@@ -178,8 +178,9 @@ const JuegoCartas = () => {
   const formatTiempo = (segundos) => {
     const minutos = Math.floor(segundos / 60);
     const segundosRestantes = segundos % 60;
-    return `${minutos.toString().padStart(0, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
+    return `${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
   };
+  
  
   return (
     <div className="juego-container">
