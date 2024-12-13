@@ -120,12 +120,17 @@ const JuegoCartas = () => {
  
   // Función que maneja el clic en una carta
   const manejarClic = (indice) => {
-    if (cartasGiradas.length < 2 && !cartasEmparejadas.includes(cartas[indice].imagen)) {
+    // Evita que se gire una carta ya girada o emparejada
+    if (
+      cartasGiradas.length < 2 &&
+      !cartasGiradas.includes(indice) &&
+      !cartasEmparejadas.includes(cartas[indice].imagen)
+    ) {
       setCartasGiradas((prev) => [...prev, indice]);
       anunciar(`Has seleccionado la carta número ${indice + 1}`);
     }
   };
-
+ 
   useEffect(() => {
     // Verifica si las cartas giradas coinciden
     if (cartasGiradas.length === 2) {
@@ -143,8 +148,8 @@ const JuegoCartas = () => {
     if (cartasEmparejadas.length === cartasImagenes.length) {
       clearInterval(intervalo); // Detiene el cronómetro
       anunciar('¡Felicidades! Has ganado el juego.');
-      alert('¡Felicidades! Has ganado el juego.');
-
+      setTimeout(() => alert(`¡Felicidades! Has ganado el juego en ${Math.floor(tiempo / 60)} minutos  y ${tiempo % 60} segundos .`), 1000);
+ 
       // Reinicia el juego cuando el usuario haga clic en "Aceptar"
       const reiniciarJuego = () => {
         setCartas(crearCartas()); // Regenera las cartas
@@ -156,7 +161,7 @@ const JuegoCartas = () => {
         }, 1000);
         setIntervalo(nuevoIntervaloId);
       };
-      reiniciarJuego();
+      setTimeout(() => reiniciarJuego(), 1500);
     }
   }, [cartasEmparejadas]);
  
@@ -173,7 +178,7 @@ const JuegoCartas = () => {
   const formatTiempo = (segundos) => {
     const minutos = Math.floor(segundos / 60);
     const segundosRestantes = segundos % 60;
-    return `${minutos.toString().padStart(0, '0')}:${segundosRestantes.toString().padStart(2  , '0')}`;
+    return `${minutos.toString().padStart(0, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
   };
  
   return (
@@ -199,3 +204,5 @@ const JuegoCartas = () => {
 };
  
 export default JuegoCartas;
+ 
+ 
